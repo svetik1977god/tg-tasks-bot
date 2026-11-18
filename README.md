@@ -30,7 +30,39 @@ utils/
     csv_export.py     # превращение задач в CSV
 ```
 
-Таблица `tasks`: `id`, `text`, `user`, `created_at`.
+## База данных
+
+Используется `SQLite3`, файл `tasks.db` создаётся автоматически при первом запуске
+(путь задаётся переменной `DB_PATH` в `.env`). Работа с базой — в `database/db.py`.
+
+Таблица `tasks`:
+
+| Поле | Тип | Описание |
+| --- | --- | --- |
+| `id` | `INTEGER PRIMARY KEY AUTOINCREMENT` | Уникальный номер задачи, выдаётся автоматически |
+| `text` | `TEXT NOT NULL` | Текст задачи |
+| `user` | `TEXT NOT NULL` | Кто добавил: `@username` или имя из профиля |
+| `created_at` | `TEXT NOT NULL` | Дата и время добавления, формат `YYYY-MM-DD HH:MM:SS` |
+
+SQL-схема:
+
+```sql
+CREATE TABLE IF NOT EXISTS tasks (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    text TEXT NOT NULL,
+    user TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+```
+
+Функции в `database/db.py`:
+
+| Функция | Что делает |
+| --- | --- |
+| `get_connection()` | Открывает соединение с базой |
+| `init_db()` | Создаёт таблицу `tasks`, если её ещё нет |
+| `add_task(text, user)` | Добавляет задачу, возвращает её `id` |
+| `get_all_tasks()` | Возвращает все задачи, отсортированные по `id` |
 
 ## Установка и запуск
 
